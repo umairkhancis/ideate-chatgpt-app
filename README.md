@@ -52,20 +52,20 @@ cd ideate-app/web
 
 ```bash
 # Install dependencies
-pnpm install
+npm install
 ```
 
 3. Build the widgets using the custom Vite build process
 Build production-ready component bundles:
 
 ```bash
-pnpm run build
+npm run build
 ```
 
 4. Serve the built assets with CORS enabled:
 
 ```bash
-pnpm run serve
+npm run serve
 ```
 
 Use `CTRL+C` to stop the server at any time.
