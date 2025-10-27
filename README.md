@@ -3,7 +3,11 @@
 A "second brain" idea management system built as a ChatGPT App using the [ChatGPT Apps SDK](https://openai.com/index/introducing-apps-in-chatgpt/). Ideate lets you capture, organize, and manage ideas directly within ChatGPT conversations through interactive UI widgets powered by the Model Context Protocol (MCP).
 
 ## Demo
-[![Watch the video](https://img.youtube.com/vi/E5iF05DwZs8/0.jpg)](https://www.youtube.com/watch?v=E5iF05DwZs8)
+[Watch Video](https://www.youtube.com/watch?v=E5iF05DwZs8)
+
+<img width="1726" height="952" alt="Screenshot 2025-10-28 at 01 14 04" src="https://github.com/user-attachments/assets/166a341c-3bb7-4e49-bf5d-c5e1866a28de" />
+
+<img width="678" height="600" alt="Screenshot 2025-10-28 at 00 50 00" src="https://github.com/user-attachments/assets/06edf7a8-d145-4b0b-9e35-1160ba4832a4" />
 
 ## Quickstart
 
