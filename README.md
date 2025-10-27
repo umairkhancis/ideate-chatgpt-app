@@ -1,6 +1,6 @@
-# Ideate - ChatGPT App 
+# Ideate - ChatGPT App
 
-This is a repository for exposing ideation app to the ChatGPT surface as an application using [ChatGPT apps SDK](https://openai.com/index/introducing-apps-in-chatgpt/).
+A "second brain" idea management system built as a ChatGPT App using the [ChatGPT Apps SDK](https://openai.com/index/introducing-apps-in-chatgpt/). Ideate lets you capture, organize, and manage ideas directly within ChatGPT conversations through interactive UI widgets powered by the Model Context Protocol (MCP).
 
 
 ## Quickstart
