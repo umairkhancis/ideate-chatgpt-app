@@ -4,11 +4,14 @@ A "second brain" idea management system built as a ChatGPT App using the [ChatGP
 
 ## Demo
 <iframe width="560" height="315"
-  src="https://www.youtube.com/watch?v=E5iF05DwZs8"
+  src=""
   frameborder="0"
   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
   allowfullscreen>
 </iframe>
+
+[![Watch the video](https://img.youtube.com/vi/E5iF05DwZs8/0.jpg)](https://www.youtube.com/watch?v=E5iF05DwZs8)
+
 
 
 ## Quickstart
