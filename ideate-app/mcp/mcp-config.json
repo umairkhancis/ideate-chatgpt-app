@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "Ideate": {
+      "command": "node",
+      "args": [
+        "dist/server.js"
+      ],
+      "env": {
+        "Ideate_API_URL": "http://localhost:5055"
+      }
+    }
+  }
+}

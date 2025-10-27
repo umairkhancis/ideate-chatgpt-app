@@ -1,0 +1,25 @@
+{
+  "name": "OpenAI Apps SDK: Building Apps for ChatGPT",
+  "customizations": {
+    "codespaces": {
+      "openFiles": [
+        "README.md"
+      ]
+    },
+    "vscode": {
+      // Set *default* container specific settings.json values on container create.
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+      },
+      // Add the IDs of extensions you want installed when the container is created.
+      "extensions": [
+        "linkedinlearning.linkedinlearning-vscode-theme"
+      ]
+    }
+  },
+  // Install UV https://docs.astral.sh/uv/getting-started/installation/
+  "postCreateCommand": "curl -LsSf https://astral.sh/uv/install.sh | sh",
+  // Pull all branches
+  "postAttachCommand": "git pull --all"
+}
+// DevContainer Reference: https://code.visualstudio.com/docs/remote/devcontainerjson-reference
