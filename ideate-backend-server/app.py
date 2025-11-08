@@ -5,6 +5,16 @@ from flasgger import Swagger, swag_from
 from models import IdeaStore
 import os
 
+# Import generic API components
+try:
+    from config_loader import load_config
+    from generic_store import GenericStore
+    from generic_api import create_generic_blueprint, seed_sample_data
+    GENERIC_API_AVAILABLE = True
+except ImportError as e:
+    print(f"Generic API not available: {e}")
+    GENERIC_API_AVAILABLE = False
+
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 api = Api(app)
@@ -425,9 +435,44 @@ if __name__ == '__main__':
             "Buy groceries", "Milk, bread, eggs, and vegetables", 3)
         idea_store.create_idea("Call mom", "Weekly check-in call", 2)
 
+    # Initialize generic API if config is provided
+    if GENERIC_API_AVAILABLE and os.environ.get('DOMAIN_CONFIG'):
+        try:
+            print("\n" + "="*60)
+            print("GENERIC API MODE")
+            print("="*60)
+            config = load_config()
+            print(
+                f"Loaded domain config: {config.label_plural} ({config.domain})")
+
+            # Create store and register blueprint
+            generic_store = GenericStore(config)
+            generic_bp = create_generic_blueprint(config, generic_store)
+            app.register_blueprint(generic_bp)
+
+            # Seed sample data if empty
+            seed_sample_data(config, generic_store)
+
+            print(f"Generic API endpoints registered:")
+            print(f"  GET    /{config.domain}")
+            print(f"  POST   /{config.domain}")
+            print(f"  GET    /{config.domain}/<id>")
+            print(f"  PUT    /{config.domain}/<id>")
+            print(f"  DELETE /{config.domain}/<id>")
+            if config.features.archive:
+                print(f"  POST   /{config.domain}/<id>/archive")
+                print(f"  POST   /{config.domain}/<id>/restore")
+            print(f"  GET    /{config.domain}/config")
+            print("="*60 + "\n")
+        except Exception as e:
+            print(f"Warning: Could not initialize generic API: {e}")
+            print("Continuing with ideas API only...\n")
+
     print("Ideate API Server starting...")
     print(f"Using database file: {DB_PATH}")
     print(f"Listening on: http://localhost:{PORT}")
     print(f"API Documentation: http://localhost:{PORT}/apidocs")
     print("Change port with PORT env var, e.g. PORT=7000 uv run python app.py")
+    if GENERIC_API_AVAILABLE:
+        print("Set DOMAIN_CONFIG env var to enable generic API")
     app.run(debug=True, host=HOST, port=PORT)

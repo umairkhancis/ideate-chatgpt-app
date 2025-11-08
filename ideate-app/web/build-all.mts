@@ -17,6 +17,8 @@ const GLOBAL_CSS_LIST = [path.resolve("src/index.css")];
 const targets: string[] = [
   "ideas-list",
   "idea-detail",
+  "generic-list",
+  "generic-detail",
 ];
 const builtNames: string[] = [];
 
@@ -106,7 +108,7 @@ for (const file of entries) {
               .update(`${pkg.version}-${name}`)
               .digest("hex")
               .slice(0, 8);
-            
+
             const filename = `${name}.${hash}.js`;
             builtNames.push(filename);
             return filename;
@@ -131,7 +133,7 @@ for (const file of entries) {
   });
 
   console.log(`Building ${name}...`);
-  
+
   try {
     await build(createConfig());
     console.log(`✓ Built ${name}`);
@@ -150,7 +152,7 @@ for (const file of entries) {
 
   const jsFile = builtNames.find(f => f.startsWith(name));
   const cssFile = fs.readdirSync(outDir).find(f => f.startsWith(name) && f.endsWith('.css'));
-  
+
   if (jsFile) {
     const htmlContent = `<!DOCTYPE html>
 <html lang="en">
@@ -171,7 +173,7 @@ for (const file of entries) {
       .update(htmlContent)
       .digest("hex")
       .slice(0, 8);
-    
+
     const htmlFilename = `${name}.${htmlHash}.html`;
     fs.writeFileSync(path.join(outDir, htmlFilename), htmlContent);
     console.log(`✓ Generated ${htmlFilename}`);
@@ -189,7 +191,7 @@ const manifest = {
     const jsFile = builtNames.find(f => f.startsWith(name));
     const cssFile = fs.readdirSync(outDir).find(f => f.startsWith(name) && f.endsWith('.css'));
     const htmlFile = fs.readdirSync(outDir).find(f => f.startsWith(name) && f.endsWith('.html'));
-    
+
     if (jsFile) {
       acc[name] = {
         js: jsFile,
@@ -206,7 +208,7 @@ const manifest = {
 };
 
 fs.writeFileSync(
-  path.join(outDir, "manifest.json"), 
+  path.join(outDir, "manifest.json"),
   JSON.stringify(manifest, null, 2)
 );
 console.log("✓ Generated manifest.json");

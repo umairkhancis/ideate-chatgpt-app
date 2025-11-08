@@ -1,0 +1,87 @@
+{
+  "domain": "products",
+  "label": "Product",
+  "labelPlural": "Products",
+  "icon": "🏷️",
+  "description": "E-commerce product catalog management",
+  "branding": {
+    "primaryColor": "#3B82F6",
+    "secondaryColor": "#10B981"
+  },
+  "fields": [
+    {
+      "key": "id",
+      "label": "ID",
+      "type": "string",
+      "hidden": true
+    },
+    {
+      "key": "name",
+      "label": "Product Name",
+      "type": "string",
+      "required": true,
+      "showInList": true,
+      "placeholder": "Enter product name"
+    },
+    {
+      "key": "description",
+      "label": "Description",
+      "type": "text",
+      "showInDetail": true,
+      "placeholder": "Describe your product"
+    },
+    {
+      "key": "price",
+      "label": "Price",
+      "type": "number",
+      "required": true,
+      "showInList": true,
+      "min": 0,
+      "placeholder": "0.00"
+    },
+    {
+      "key": "stock",
+      "label": "Stock Quantity",
+      "type": "number",
+      "showInList": true,
+      "min": 0,
+      "default": 0
+    },
+    {
+      "key": "priority",
+      "label": "Priority",
+      "type": "number",
+      "showInList": true,
+      "min": 1,
+      "max": 5,
+      "default": 3,
+      "helpText": "1=Low, 3=Medium, 5=High"
+    },
+    {
+      "key": "archived",
+      "label": "Archived",
+      "type": "boolean",
+      "hidden": true,
+      "default": false
+    },
+    {
+      "key": "created_date",
+      "label": "Created Date",
+      "type": "datetime",
+      "showInDetail": true
+    },
+    {
+      "key": "updated_date",
+      "label": "Updated Date",
+      "type": "datetime",
+      "showInDetail": true
+    }
+  ],
+  "features": {
+    "create": true,
+    "update": true,
+    "delete": true,
+    "archive": true,
+    "search": false
+  }
+}

@@ -2,8 +2,57 @@
 
 A "second brain" idea management system built as a ChatGPT App using the [ChatGPT Apps SDK](https://openai.com/index/introducing-apps-in-chatgpt/). Ideate lets you capture, organize, and manage ideas directly within ChatGPT conversations through interactive UI widgets powered by the Model Context Protocol (MCP).
 
+## 🚀 NEW: Generic Domain Model System
 
-## Quickstart
+**Transform any business domain into a ChatGPT app with just a JSON config file!**
+
+The Ideate platform now supports **generic domain models** - a configuration-driven system that creates complete CRUD applications without writing code. Perfect for demoing ChatGPT Apps to different businesses.
+
+### What You Get
+
+✅ **One config file → Complete CRUD system**  
+✅ **Branded UI widgets** in ChatGPT (custom colors, icons)  
+✅ **Full list/detail views** with custom fields  
+✅ **No code changes** needed for new domains  
+✅ **Works alongside** existing Ideas system  
+
+### Quick Demo (5 Minutes)
+
+```bash
+# Terminal 1: Backend with Products config
+cd ideate-backend-server
+export DOMAIN_CONFIG=../config/product.json
+uv run python app.py
+
+# Terminal 2: Serve widgets
+cd ideate-app/web
+pnpm run serve
+
+# Terminal 3: MCP server
+cd ideate-app/mcp
+export DOMAIN_CONFIG=../../config/product.json
+npm start
+```
+
+Then in ChatGPT: `"Show me all products"`
+
+### Example Domains
+
+- **E-Commerce** (`product.json`) - Product catalog with inventory
+- **CRM** (`customer.json`) - Customer management
+- **Project Management** (`task.json`) - Task tracking
+- **Real Estate** (`property.json`) - Property listings
+
+### Learn More
+
+- **[DEMO_GUIDE.md](./DEMO_GUIDE.md)** - Complete demo instructions
+- **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)** - Technical details
+- **[config/README.md](./config/README.md)** - Configuration guide
+- **[config/schema.json](./config/schema.json)** - JSON Schema
+
+---
+
+## Quickstart (Original Ideas System)
 
 To run the Ideate app on ChatGPT you need to build and start three separate services:
 

@@ -1,0 +1,72 @@
+{
+  "domain": "ideas",
+  "label": "Idea",
+  "labelPlural": "Ideas",
+  "icon": "💡",
+  "description": "Idea management system - second brain for capturing brilliant thoughts",
+  "branding": {
+    "primaryColor": "#3B82F6",
+    "secondaryColor": "#10B981"
+  },
+  "fields": [
+    {
+      "key": "id",
+      "label": "ID",
+      "type": "string",
+      "hidden": true
+    },
+    {
+      "key": "title",
+      "label": "Title",
+      "type": "string",
+      "required": true,
+      "showInList": true,
+      "placeholder": "Enter idea title"
+    },
+    {
+      "key": "description",
+      "label": "Description",
+      "type": "text",
+      "required": true,
+      "showInDetail": true,
+      "placeholder": "Describe your idea"
+    },
+    {
+      "key": "urgency",
+      "label": "Urgency",
+      "type": "number",
+      "required": true,
+      "showInList": true,
+      "min": 1,
+      "max": 5,
+      "default": 3,
+      "helpText": "1=Not Important, 2=Low, 3=Medium, 4=High, 5=Immediate"
+    },
+    {
+      "key": "archived",
+      "label": "Archived",
+      "type": "boolean",
+      "hidden": true,
+      "default": false
+    },
+    {
+      "key": "created_date",
+      "label": "Created Date",
+      "type": "datetime",
+      "showInDetail": true
+    },
+    {
+      "key": "updated_date",
+      "label": "Updated Date",
+      "type": "datetime",
+      "showInDetail": true
+    }
+  ],
+  "features": {
+    "create": true,
+    "update": true,
+    "delete": true,
+    "archive": true,
+    "search": false
+  }
+}

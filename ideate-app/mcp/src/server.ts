@@ -9,6 +9,8 @@ import express from "express";
 import { z } from "zod";
 import { readFileSync } from "fs";
 import path from "path";
+import { loadDomainConfig, getDomainConfig } from "./config-loader.js";
+import { registerGenericTools } from "./generic-tools.js";
 
 // Types based on the API schema
 interface Idea {
@@ -74,6 +76,14 @@ const IDEA_LIST_JS = loadAssetText(ideaListMeta?.js);
 const IDEA_LIST_CSS = loadAssetText(ideaListMeta?.css);
 const IDEA_DETAIL_JS = loadAssetText(ideaDetailMeta?.js);
 const IDEA_DETAIL_CSS = loadAssetText(ideaDetailMeta?.css);
+
+// Load generic widget assets
+const genericListMeta = manifest.components["generic-list"];
+const genericDetailMeta = manifest.components["generic-detail"];
+const GENERIC_LIST_JS = loadAssetText(genericListMeta?.js);
+const GENERIC_LIST_CSS = loadAssetText(genericListMeta?.css);
+const GENERIC_DETAIL_JS = loadAssetText(genericDetailMeta?.js);
+const GENERIC_DETAIL_CSS = loadAssetText(genericDetailMeta?.css);
 
 // Shared widget metadata flags applied to tools and resources that can render UI components
 const WIDGET_META_FLAGS = {
@@ -806,6 +816,134 @@ server.registerResource(
     ],
   })
 );
+
+// ========================================================================
+// GENERIC DOMAIN MODEL SUPPORT
+// ========================================================================
+
+// Load domain configuration and register generic tools if available
+const domainConfig = loadDomainConfig();
+
+if (domainConfig && genericListMeta && genericDetailMeta) {
+  console.log("\n" + "=".repeat(60));
+  console.log("GENERIC API MODE ENABLED");
+  console.log("=".repeat(60));
+
+  // Register generic tools
+  registerGenericTools(server, domainConfig, manifest);
+
+  // Register generic UI resources
+  const VERSIONED_GENERIC_LIST_URI = genericListMeta?.resourceUri || `ui://widget/v${manifest.version}/generic-list.html`;
+  const VERSIONED_GENERIC_DETAIL_URI = genericDetailMeta?.resourceUri || `ui://widget/v${manifest.version}/generic-detail.html`;
+
+  server.registerResource(
+    "generic-list-ui",
+    VERSIONED_GENERIC_LIST_URI,
+    {
+      title: `${domainConfig.labelPlural} List UI`,
+      description: `Interactive UI for displaying and managing ${domainConfig.labelPlural.toLowerCase()} list`,
+      mimeType: "text/html+skybridge",
+      _meta: {
+        ...WIDGET_META_FLAGS,
+        "openai/outputTemplate": VERSIONED_GENERIC_LIST_URI,
+      },
+    },
+    async () => ({
+      contents: [
+        {
+          uri: VERSIONED_GENERIC_LIST_URI,
+          mimeType: "text/html+skybridge",
+          text: widgetHtml("generic-list-root", GENERIC_LIST_JS, GENERIC_LIST_CSS),
+          _meta: {
+            ...WIDGET_META_FLAGS,
+            "openai/widgetDescription": `Renders an interactive UI showing the ${domainConfig.labelPlural.toLowerCase()} for browsing, filtering, and navigation.`,
+            "openai/widgetPrefersBorder": true,
+            "openai/outputTemplate": VERSIONED_GENERIC_LIST_URI,
+          },
+        },
+      ],
+    })
+  );
+
+  server.registerResource(
+    "generic-detail-ui",
+    VERSIONED_GENERIC_DETAIL_URI,
+    {
+      title: `${domainConfig.label} Detail UI`,
+      description: `Interactive UI for viewing and editing a specific ${domainConfig.label.toLowerCase()}`,
+      mimeType: "text/html+skybridge",
+      _meta: {
+        ...WIDGET_META_FLAGS,
+        "openai/outputTemplate": VERSIONED_GENERIC_DETAIL_URI,
+      },
+    },
+    async () => ({
+      contents: [
+        {
+          uri: VERSIONED_GENERIC_DETAIL_URI,
+          mimeType: "text/html+skybridge",
+          text: widgetHtml("generic-detail-root", GENERIC_DETAIL_JS, GENERIC_DETAIL_CSS),
+          _meta: {
+            ...WIDGET_META_FLAGS,
+            "openai/widgetDescription": `Renders an interactive UI with the details of the ${domainConfig.label.toLowerCase()}.`,
+            "openai/widgetPrefersBorder": true,
+            "openai/outputTemplate": VERSIONED_GENERIC_DETAIL_URI,
+          },
+        },
+      ],
+    })
+  );
+
+  // Register generic data resources
+  server.registerResource(
+    `${domainConfig.domain}-all`,
+    `${domainConfig.domain}://${domainConfig.domain}`,
+    {
+      title: `All ${domainConfig.labelPlural}`,
+      description: `All active ${domainConfig.labelPlural.toLowerCase()}`,
+      mimeType: "application/json",
+    },
+    async () => {
+      const items = await makeApiRequest<any[]>(`/${domainConfig.domain}`);
+      return {
+        contents: [
+          {
+            text: JSON.stringify(items, null, 2),
+            uri: `${domainConfig.domain}://${domainConfig.domain}`,
+            mimeType: "application/json",
+          },
+        ],
+      };
+    }
+  );
+
+  if (domainConfig.features?.archive) {
+    server.registerResource(
+      `${domainConfig.domain}-archived`,
+      `${domainConfig.domain}://${domainConfig.domain}/archived`,
+      {
+        title: `Archived ${domainConfig.labelPlural}`,
+        description: `All archived ${domainConfig.labelPlural.toLowerCase()}`,
+        mimeType: "application/json",
+      },
+      async () => {
+        const items = await makeApiRequest<any[]>(`/${domainConfig.domain}?archivedOnly=true`);
+        return {
+          contents: [
+            {
+              text: JSON.stringify(items, null, 2),
+              uri: `${domainConfig.domain}://${domainConfig.domain}/archived`,
+              mimeType: "application/json",
+            },
+          ],
+        };
+      }
+    );
+  }
+
+  console.log(`✓ Registered generic resources for ${domainConfig.labelPlural}`);
+  console.log("=".repeat(60) + "\n");
+}
 
 // Set up Express and HTTP transport
 const app = express();
